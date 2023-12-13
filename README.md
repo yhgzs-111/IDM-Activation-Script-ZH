@@ -10,7 +10,7 @@
 -   完全开源
 -   基于透明的批处理脚本
 
-## IAS最新版本
+## IAS最新版本（原版）
 
 最新版本 - v1.0（2023年12月01日）\
 [GitHub](https://github.com/WindowsAddict/IDM-Activation-Script) - [BitBucket](https://bitbucket.org/WindowsAddict/idm-activation-script/)
@@ -22,7 +22,7 @@
 
 ### 方法1 - PowerShell
 
-（推荐）
+（通过此方法下载的为原版，即英文版）
 
 -   在Windows 8.1/10/11上，右键单击Windows开始菜单，选择PowerShell或终端（不是CMD）。
 -   复制粘贴下面的代码，然后按Enter键\
