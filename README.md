@@ -10,11 +10,6 @@
 -   完全开源
 -   基于透明的批处理脚本
 
-## IAS最新版本（原版）
-
-最新版本 - v1.0（2023年12月01日）\
-[GitHub](https://github.com/WindowsAddict/IDM-Activation-Script) - [BitBucket](https://bitbucket.org/WindowsAddict/idm-activation-script/)
-
 ## 下载 / 如何使用？
 
 -   首先全新安装[Internet Download Manager](https://www.internetdownloadmanager.com/)。确保删除/卸载以前的破解/补丁（如果有的话）。
@@ -113,9 +108,5 @@
 | AveYo aka BAU                               | [reg_own精简而强大的片段](https://pastebin.com/XTPt0JSC)                                                                                                                                                                         |
 | [abbodi1406](https://github.com/abbodi1406) | 在编码方面提供帮助                                                                                                                                                                                                                         |
 | WindowsAddict                               | IAS的作者                                                                                                                                                                                                                             |
-
-感谢IAS用户的关注、反馈和帮助。
-
-------------------------------------------------------------------------
-
-用爱心制作 ❤️
+| [yhgzs-111](https://github.com/yhgzs-111)                                    | 中文汉化作者                                                                                                                                                                                                                          |
+感谢使用此脚本的用户的关注、反馈和帮助。
