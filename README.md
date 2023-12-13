@@ -19,11 +19,11 @@
 
 （推荐，通过此方法下载的程序为汉化版，更适合中国宝宝体制👶）
 
--   从[GitHub Releases](https://github.com/yhgzs-111/IDM-Activation-Script-ZH/releases)下载压缩包。
--   右键单击下载的zip文件并解压缩。
--   在提取的文件夹中，运行名为`IAS.cmd`的文件。
--   您将看到激活选项，请按照屏幕上的说明操作。
--   
+-   从[GitHub Releases](https://github.com/yhgzs-111/IDM-Activation-Script-ZH/releases)下载压缩包
+-   右键单击下载的zip文件并解压缩
+-   在提取的文件夹中，运行名为`IAS.cmd`的文件
+-   您将看到激活选项，请按照屏幕上的说明操作
+
 ### 方法2 - PowerShell
 
 （通过此方法下载的为原版，即英文版）
@@ -32,7 +32,7 @@
 -   复制粘贴下面的代码，然后按Enter键\
     `irm https://massgrave.dev/ias | iex`
 -   你将看到激活选项，请按照屏幕上的说明操作
--   
+
 ## 一些提示
 
 #### 激活
