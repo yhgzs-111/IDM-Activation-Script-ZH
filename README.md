@@ -1,6 +1,6 @@
 # IDM激活脚本中文汉化版
 
-一个用于激活和重置[Internet Download Manager](https://www.internetdownloadmanager.com/)试用版的开源工具。
+一个用于激活和重置[Internet Download Manager](https://www.internetdownloadmanager.com/)试用版的开源工具
 
 ## 特点
 
@@ -12,20 +12,10 @@
 
 ## 下载 / 如何使用？
 
--   首先全新安装[Internet Download Manager](https://www.internetdownloadmanager.com/)。确保删除/卸载以前的破解/补丁（如果有的话）。
--   然后按照以下步骤激活。
+-   首先全新安装[Internet Download Manager](https://www.internetdownloadmanager.com/)，确保删除/卸载以前的破解/补丁（如果有的话）
+-   然后按照以下步骤激活：
 
-### 方法1 - PowerShell
-
-（通过此方法下载的为原版，即英文版）
-
--   在Windows 8.1/10/11上，右键单击Windows开始菜单，选择PowerShell或终端（不是CMD）。
--   复制粘贴下面的代码，然后按Enter键\
-    `irm https://massgrave.dev/ias | iex`
--   您将看到激活选项，请按照屏幕上的说明操作。
--   就是这样。
-
-### 方法2 - 传统
+### 方法1 - Github Releases
 
 （推荐，通过此方法下载的程序为汉化版，更适合中国宝宝体制👶）
 
@@ -33,31 +23,40 @@
 -   右键单击下载的zip文件并解压缩。
 -   在提取的文件夹中，运行名为`IAS.cmd`的文件。
 -   您将看到激活选项，请按照屏幕上的说明操作。
+-   
+### 方法2 - PowerShell
 
-## 信息
+（通过此方法下载的为原版，即英文版）
+
+-   在Windows 8.1/10/11上，右键单击Windows开始菜单，选择PowerShell或终端（不是CMD）
+-   复制粘贴下面的代码，然后按Enter键\
+    `irm https://massgrave.dev/ias | iex`
+-   你将看到激活选项，请按照屏幕上的说明操作
+-   
+## 一些提示
 
 #### 激活
 
--   该脚本应用注册表锁定方法激活Internet Download Manager（IDM）。
--   此方法要求在激活时连接到互联网。
--   可以直接安装IDM更新，无需再次激活。
--   激活后，如果在某些情况下，IDM开始显示激活提示屏幕，只需再次运行激活选项，而不使用重置选项。
+-   该脚本应用注册表锁定方法激活Internet Download Manager（IDM）
+-   此方法要求在激活时连接到互联网
+-   可以直接安装IDM更新，无需再次激活
+-   激活后，如果在某些情况下，IDM开始显示激活提示屏幕，只需再次运行激活选项，而不使用重置选项
 
 #### 重置IDM激活 / 试用
 
--   Internet Download Manager提供30天的试用期，您可以使用此脚本在需要时重置此激活 / 试用期。
--   如果IDM报告虚假序列号和其他类似错误，此选项也可用于恢复状态。
+-   Internet Download Manager提供30天的试用期，您可以使用此脚本在需要时重置此激活 / 试用期
+-   如果IDM报告虚假序列号和其他类似错误，此选项也可用于恢复状态
 
 #### 操作系统要求
 
--   该项目支持Windows 7/8/8.1/10/11及其服务器等效版本。
--   在Windows 8及更高版本上支持使用PowerShell方法运行IAS。
+-   该项目支持Windows 7/8/8.1/10/11及其服务器等效版本
+-   在Windows 8及更高版本上支持使用PowerShell方法运行IAS
 
 #### 高级信息
 
--   要在IDM许可信息中添加自定义名称，请编辑脚本文件中的第29行。
--   要在无人值守模式下激活，请使用`/act`参数运行脚本。
--   要在无人值守模式下重置，请使用`/res`参数运行脚本。
+-   要在IDM许可信息中添加自定义名称，请编辑脚本文件中的第29行
+-   要在无人值守模式下激活，请使用`/act`参数运行脚本
+-   要在无人值守模式下重置，请使用`/res`参数运行脚本
 
 ## 工作原理
 
@@ -66,7 +65,7 @@
 ## 故障排除
 
 -   浏览器集成修复：[Chrome](https://www.internetdownloadmanager.com/register/new_faq/bi9.html) - [Firefox](https://www.internetdownloadmanager.com/register/new_faq/bi4.html)
--   在[Discord](https://discord.gg/gjJEfq7ux8)上联系我们（无需注册），并附上错误截图。
+-   在[Discord](https://discord.gg/gjJEfq7ux8)上联系我们（无需注册），并附上错误截图
 
 [![](https://lookimg.com/images/2023/03/21/QTvjcD.png)](https://discord.gg/gjJEfq7ux8)
 
@@ -104,9 +103,9 @@
 
 |                                             |                                                                                                                                                                                                                                        |
 |----------------|--------------------------------------------------------|
-| Dukun Cabul                                 | 这个IDM试用重置和激活逻辑的原始研究者，为这些方法创建了一个Autoit工具，名为[IDM-AIO_2020_Final](https://nsaneforums.com/topic/371047-discussion-internet-download-manager-fixes/page/8/#comment-1632062) |
+| Dukun Cabul                                 | IDM试用重置和激活逻辑的原始研究者，为这些方法创建了一个Autoit工具，名为[IDM-AIO_2020_Final](https://nsaneforums.com/topic/371047-discussion-internet-download-manager-fixes/page/8/#comment-1632062) |
 | AveYo aka BAU                               | [reg_own精简而强大的片段](https://pastebin.com/XTPt0JSC)                                                                                                                                                                         |
 | [abbodi1406](https://github.com/abbodi1406) | 在编码方面提供帮助                                                                                                                                                                                                                         |
 | WindowsAddict                               | IAS的作者                                                                                                                                                                                                                             |
-| [yhgzs-111](https://github.com/yhgzs-111)                                    | 中文汉化作者                                                                                                                                                                                                                          |
+| [yhgzs-111](https://github.com/yhgzs-111)                                    | 中文汉化                                                                                                                                                                                                                          |
 感谢使用此脚本的用户的关注、反馈和帮助。
