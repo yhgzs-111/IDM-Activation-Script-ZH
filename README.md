@@ -108,4 +108,3 @@
 | [abbodi1406](https://github.com/abbodi1406) | 在编码方面提供帮助                                                                                                                                                                                                                         |
 | WindowsAddict                               | IAS的作者                                                                                                                                                                                                                             |
 | [yhgzs-111](https://github.com/yhgzs-111)                                    | 中文汉化                                                                                                                                                                                                                          |
-感谢使用此脚本的用户的关注、反馈和帮助。
