@@ -19,7 +19,7 @@
 
 （推荐，通过此方法下载的程序为汉化版，更适合中国宝宝体制👶）
 
--   从[GitHub Releases](https://github.com/yhgzs-111/IDM-Activation-Script-ZH/releases)下载压缩包
+-   从[GitHub Releases](https://github.com/yhgzs-111/IDM-Activation-Script-ZH/releases/download/IDM/IAS_ZH.cmd)下载cmd文件
 -   右键单击下载的zip文件并解压缩
 -   在提取的文件夹中，运行名为`IAS.cmd`的文件
 -   您将看到激活选项，请按照屏幕上的说明操作
