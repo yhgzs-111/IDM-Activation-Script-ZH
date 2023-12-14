@@ -11,6 +11,8 @@ chcp 65001
 ::         https://massgrave.dev/idm-activation-script
 ::
 ::   电子邮件：windowsaddict@protonmail.com
+::   汉化作者：https://github.com/yhgzs-111/
+::   汉化主页：https://github.com/yhgzs-111/IDM-Activation-Script-ZH/
 ::
 ::============================================================================
 
@@ -395,7 +397,7 @@ echo:               [2] 重置 IDM 激活 / 试用
 echo:               _____________________________________________   
 echo:                                                               
 echo:               [3] 下载 IDM
-echo:               [4] 帮助
+echo:               [4] 软件主页/帮助
 echo:               [0] 退出
 echo:            ___________________________________________________
 echo:         
@@ -404,7 +406,7 @@ choice /C:12340 /N
 set _erl=%errorlevel%
 
 if %_erl%==5 exit /b
-if %_erl%==4 start https://github.com/WindowsAddict/IDM-Activation-Script & start https://massgrave.dev/idm-activation-script & goto MainMenu
+if %_erl%==4 start https://massgrave.dev/idm-activation-script & start https://github.com/yhgzs-111/IDM-Activation-Script-ZH/ & goto MainMenu
 if %_erl%==3 start https://www.internetdownloadmanager.com/download.html & goto MainMenu
 if %_erl%==2 goto _reset
 if %_erl%==1 goto _activate
