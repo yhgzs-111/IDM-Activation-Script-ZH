@@ -1,3 +1,5 @@
+使用说明请在 https://yhgzs-111.github.io/page/IDM.html 查看。
+
 # 说明文档
 
 已迁移至Github Pages，请在 https://yhgzs-111.github.io/page/IDM.html 查看。
