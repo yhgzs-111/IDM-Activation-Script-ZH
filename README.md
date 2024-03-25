@@ -20,9 +20,8 @@
 （推荐，通过此方法下载的程序为汉化版，更适合中国宝宝体制👶）
 
 -   从[GitHub](https://raw.githubusercontent.com/yhgzs-111/IDM-Activation-Script-ZH/main/IAS(%E6%B1%89%E5%8C%96).cmd)下载cmd文件
--   右键单击下载的zip文件并解压缩
--   在提取的文件夹中，运行名为`IAS.cmd`的文件
--   您将看到激活选项，请按照屏幕上的说明操作
+-   运行名为`IAS.cmd`的文件
+-   您将看到多个选项，请按照屏幕上的说明操作
 
 ### 方法2 - PowerShell
 
@@ -71,9 +70,10 @@
 
 ## 截图
 
-![](https://massgrave.dev/IAS.png?raw=true)
+![image](https://github.com/yhgzs-111/IDM-Activation-Script-ZH/assets/77568569/6fe8bfdb-a58d-42d3-b0bf-4bf197d9cb2d)
 
-![](https://massgrave.dev//IAS_Activation.png?raw=true)
+![image](https://github.com/yhgzs-111/IDM-Activation-Script-ZH/assets/77568569/00ab6e33-c436-42bd-a025-341e4ddede5c)
+
 
 ## 鸣谢
 
