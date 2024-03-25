@@ -1,11 +1,11 @@
 chcp 65001
-@set iasver=1.0
+@set iasver=1.2
 @setlocal DisableDelayedExpansion
 @echo off
 
 ::============================================================================
 ::
-::   IDM 激活脚本（IAS）
+::   IDM 激活脚本 IDM Activation Script（IAS）
 ::
 ::   主页：https://github.com/WindowsAddict/IDM-Activation-Script
 ::         https://massgrave.dev/idm-activation-script
@@ -16,48 +16,43 @@ chcp 65001
 ::
 ::============================================================================
 
-::  要激活，请使用 "/act" 参数运行脚本，或在下面的行中将 0 更改为 1
+:: 要激活，请使用 "/act" 参数运行脚本或在下面的行中将 0 更改为 1
 set _activate=0
 
-::  要重置激活和试用期，请使用 "/res" 参数运行脚本，或在下面的行中将 0 更改为 1
+:: 要冻结 30 天的试用期，请使用 "/frz" 参数运行脚本或在下面的行中将 0 更改为 1
+set _freeze=0
+
+:: 要重置激活和试用，请使用 "/res" 参数运行脚本或在下面的行中将 0 更改为 1
 set _reset=0
 
-::  如果在上面的行中更改了值或使用了参数，则脚本将以无人值守模式运行
-
-::  在 IDM 许可信息中添加自定义名称，在等号后的下面一行写入英文
-set name=
+:: 如果在上述行中更改了值或使用了参数，则脚本将以无人值守模式运行
 
 ::========================================================================================================================================
-:: 设置路径变量，如果系统中配置错误，这将有助于修正
+
+:: 设置路径变量，如果系统中配置错误，则有助于解决
 
 set "PATH=%SystemRoot%\System32;%SystemRoot%\System32\wbem;%SystemRoot%\System32\WindowsPowerShell\v1.0\"
 if exist "%SystemRoot%\Sysnative\reg.exe" (
-    set "PATH=%SystemRoot%\Sysnative;%SystemRoot%\Sysnative\wbem;%SystemRoot%\Sysnative\WindowsPowerShell\v1.0\;%PATH%"
+set "PATH=%SystemRoot%\Sysnative;%SystemRoot%\Sysnative\wbem;%SystemRoot%\Sysnative\WindowsPowerShell\v1.0\;%PATH%"
 )
 
-:: 如果由 x64 进程在 x64 位 Windows 上启动，则使用 x64 进程重新启动脚本
-:: 或者如果由 x86/ARM32 进程在 ARM64 Windows 上启动，则使用 ARM64 进程重新启动脚本
+:: 如果在 64 位 Windows 上由 32 位进程启动脚本，则使用 x64 进程重新启动脚本
+:: 或者在 ARM64 Windows 上由 x86/ARM32 进程启动脚本时使用 ARM64 进程重新启动
 
 set "_cmdf=%~f0"
 for %%# in (%*) do (
-    if /i "%%#"=="r1" set r1=1
-    if /i "%%#"=="r2" set r2=1
-    if /i "%%#"=="-qedit" (
-        reg add HKCU\Console /v QuickEdit /t REG_DWORD /d "1" /f 1>nul
-        rem 检查下面的管理员提升代码，理解为什么它在这里
-    )
+if /i "%%#"=="r1" set r1=1
+if /i "%%#"=="r2" set r2=1
 )
 
 if exist %SystemRoot%\Sysnative\cmd.exe if not defined r1 (
-    setlocal EnableDelayedExpansion
-    start %SystemRoot%\Sysnative\cmd.exe /c ""!_cmdf!" %* r1"
-    exit /b
+setlocal EnableDelayedExpansion
+start %SystemRoot%\Sysnative\cmd.exe /c ""!_cmdf!" %* r1"
+exit /b
 )
 
-:: 如果由 x64 进程在 ARM64 Windows 上启动，则使用 ARM32 进程重新启动脚本
-
 if exist %SystemRoot%\SysArm32\cmd.exe if %PROCESSOR_ARCHITECTURE%==AMD64 if not defined r2 (
-    setlocal EnableDelayedExpansion
+setlocal EnableDelayedExpansion
 start %SystemRoot%\SysArm32\cmd.exe /c ""!_cmdf!" %* r2"
 exit /b
 )
@@ -67,28 +62,28 @@ exit /b
 set "blank="
 set "mas=ht%blank%tps%blank%://mass%blank%grave.dev/"
 
-::  检查 Null 服务是否正在运行，这对于批处理脚本很重要
+:: 检查空服务是否运行，这对批处理脚本很重要
 
 sc query Null | find /i "RUNNING"
 if %errorlevel% NEQ 0 (
-    echo:
-    echo Null 服务未运行，脚本可能会崩溃...
-    echo:
-    echo:
-    echo 帮助 - %mas%idm-activation-script.html#Troubleshoot
-    echo:
-    echo:
-    ping 127.0.0.1 -n 10
+echo:
+echo Null 服务未运行，脚本可能会崩溃...
+echo:
+echo:
+echo 帮助 - %mas%idm-activation-script.html#Troubleshoot
+echo:
+echo:
+ping 127.0.0.1 -n 10
 )
 cls
 
-::  检查 LF 行结束符
+:: 检查 LF 行结束符
 
 pushd "%~dp0"
 >nul findstr /v "$" "%~nx0" && (
-    echo:
-    echo 错误：脚本可能存在 LF 行结束符问题，或者脚本末尾缺少空行。
-    echo:
+echo:
+echo 错误：脚本可能存在 LF 行结束符问题，或脚本末尾缺少空行。
+echo:
 ping 127.0.0.1 -n 6 >nul
 popd
 exit /b
@@ -99,7 +94,7 @@ popd
 
 cls
 color 07
-title  IDM Activation Script %iasver%
+title IDM Activation Script %iasver%
 
 set _args=
 set _elev=
@@ -108,14 +103,15 @@ set _unattended=0
 set _args=%*
 if defined _args set _args=%_args:"=%
 if defined _args (
-    for %%A in (%_args%) do (
-        if /i "%%A"=="-el"  set _elev=1
-        if /i "%%A"=="/res" set _reset=1
-        if /i "%%A"=="/act" set _activate=1
-    )
+for %%A in (%_args%) do (
+if /i "%%A"=="-el"  set _elev=1
+if /i "%%A"=="/res" set _reset=1
+if /i "%%A"=="/frz" set _freeze=1
+if /i "%%A"=="/act" set _activate=1
+)
 )
 
-for %%A in (%_activate% %_reset%) do (if "%%A"=="1" set _unattended=1)
+for %%A in (%_activate% %_freeze% %_reset%) do (if "%%A"=="1" set _unattended=1)
 
 ::========================================================================================================================================
 
@@ -133,23 +129,24 @@ if %winbuild% LSS 10586 set _NCS=0
 if %winbuild% GEQ 10586 reg query "HKCU\Console" /v ForceV2 %nul2% | find /i "0x0" %nul1% && (set _NCS=0)
 
 if %_NCS% EQU 1 (
-    for /F %%a in ('echo prompt $E ^| cmd') do set "esc=%%a"
-    set     "Red="41;97m""
-    set    "Gray="100;97m""
-    set   "Green="42;97m""
-    set    "Blue="44;97m""
-    set  "_White="40;37m""
-    set  "_Green="40;92m""
-    set "_Yellow="40;93m""
+for /F %%a in ('echo prompt $E ^| cmd') do set "esc=%%a"
+set     "Red="41;97m""
+set    "Gray="100;97m""
+set   "Green="42;97m""
+set    "Blue="44;97m""
+set  "_White="40;37m""
+set  "_Green="40;92m""
+set "_Yellow="40;93m""
 ) else (
-    set     "Red="Red" "white""
-    set    "Gray="Darkgray" "white""
-    set   "Green="DarkGreen" "white""
-    set    "Blue="Blue" "white""
-    set  "_White="Black" "Gray""
-    set  "_Green="Black" "Green""
-    set "_Yellow="Black" "Yellow""
+set     "Red="Red" "white""
+set    "Gray="Darkgray" "white""
+set   "Green="DarkGreen" "white""
+set    "Blue="Blue" "white""
+set  "_White="Black" "Gray""
+set  "_Green="Black" "Green""
+set "_Yellow="Black" "Yellow""
 )
+
 set "nceline=echo: &echo ==== ERROR ==== &echo:"
 set "eline=echo: &call :_color %Red% "==== ERROR ====" &echo:"
 set "line=___________________________________________________________________________________________________"
@@ -160,13 +157,13 @@ set "_buf={$W=$Host.UI.RawUI.WindowSize;$B=$Host.UI.RawUI.BufferSize;$W.Height=3
 if %winbuild% LSS 7600 (
     %nceline%
     echo 不支持的操作系统版本 [%winbuild%]。
-    echo 该项目仅支持 Windows 7/8/8.1/10/11 及其服务器等效版本。
+    echo 此项目仅支持 Windows 7/8/8.1/10/11 及其服务器等效版本。
     goto done2
 )
 
 for %%# in (powershell.exe) do @if "%%~$PATH:#"=="" (
     %nceline%
-    echo 在系统中找不到 powershell.exe。
+    echo 系统中找不到 powershell.exe。
     goto done2
 )
 
@@ -178,9 +175,11 @@ set "_work=%~dp0"
 if "%_work:~-1%"=="\" set "_work=%_work:~0,-1%"
 
 set "_batf=%~f0"
-set "_batp=%_batf:'=''"
+set "_batp=%_batf:'=''%"
 
 set _PSarg="""%~f0""" -el %_args%
+set _PSarg=%_PSarg:'=''%
+
 set "_appdata=%appdata%"
 set "_ttemp=%userprofile%\AppData\Local\Temp"
 
@@ -189,66 +188,77 @@ setlocal EnableDelayedExpansion
 ::========================================================================================================================================
 
 echo "!_batf!" | find /i "!_ttemp!" %nul1% && (
-if /i not "!_work!"=="!_ttemp!" (
-%eline%
-echo 脚本是从临时文件夹启动的，
-echo 很可能您是直接从压缩文件中运行脚本。
-echo:
-echo 解压缩文件并从解压后的文件夹启动脚本。
-goto done2
-)
+    if /i not "!_work!"=="!_ttemp!" (
+        %eline%
+        echo 脚本是从临时文件夹启动的，
+        echo 很可能您是直接从存档文件运行脚本。
+        echo:
+        echo 请提取存档文件并在提取后的文件夹并脚本。
+        goto done2
+    )
 )
 
 ::========================================================================================================================================
 
-:: 提升脚本为管理员并传递参数，防止循环
+:: 检查 PowerShell
+
+REM :PowerShellTest: $ExecutionContext.SessionState.LanguageMode :PowerShellTest:
+
+%psc% "$f=[io.file]::ReadAllText('!_batp!') -split ':PowerShellTest:\s*';iex ($f[1])" | find /i "FullLanguage" %nul1% || (
+%eline%
+%psc% $ExecutionContext.SessionState.LanguageMode
+echo:
+echo PowerShell 未正常工作。正在中止...
+echo 如果您对 PowerShell 应用了限制，请取消这些更改。
+echo:
+echo 请查看此页面以获取帮助。 %mas%idm-activation-script.html#Troubleshoot
+goto done2
+)
+
+::========================================================================================================================================
+
+:: 提升脚本权限为管理员并传递参数以及避免循环
 
 %nul1% fltmc || (
-if not defined _elev %psc% "start cmd.exe -arg '/c \"!_PSarg:'=''!\"' -verb runas" && exit /b
+if not defined _elev %psc% "start cmd.exe -arg '/c \"!_PSarg!\"' -verb runas" && exit /b
 %eline%
 echo 此脚本需要管理员权限。
-echo 请右键单击此脚本并选择“以管理员身份运行”。
+echo 请右键单击此脚本，然后选择“以管理员身份运行”。
 goto done2
 )
+
 ::========================================================================================================================================
 
-:: 此代码仅禁用当前 cmd.exe 会话的 QuickEdit，而不对注册表进行永久更改
-:: 之所以添加这部分代码，是因为单击脚本窗口会暂停操作，导致混淆，误认为脚本由于错误而停止
+:: 禁用 QuickEdit 并从 conhost.exe 启动以避免终端应用
 
-if %_unattended%==1 set quedit=1
+set quedit=
+set terminal=
+
+if %_unattended%==1 (
+set quedit=1
+set terminal=1
+)
+
 for %%# in (%_args%) do (if /i "%%#"=="-qedit" set quedit=1)
 
-reg query HKCU\Console /v QuickEdit %nul2% | find /i "0x0" %nul1% || if not defined quedit (
-reg add HKCU\Console /v QuickEdit /t REG_DWORD /d "0" /f %nul1%
-start cmd.exe /c ""!_batf!" %_args% -qedit"
-rem 将 quickedit 重置代码添加到脚本开头而不是此处，因为在某些情况下需要时间来反映
-exit /b
+if %winbuild% LSS 10586 (
+reg query HKCU\Console /v QuickEdit %nul2% | find /i "0x0" %nul1% && set quedit=1
 )
-
-::========================================================================================================================================
-
-:: 此代码检查脚本是否在终端应用程序中运行，如果是，则使用 conhost.exe 重新启动
-
-if %_unattended%==1 set wtrel=1
-for %%# in (%_args%) do (if /i "%%#"=="-wt" set wtrel=1)
 
 if %winbuild% GEQ 17763 (
-set terminal=1
-
-if not defined wtrel (
-set test=TermTest-%random%
-title !test!
-%psc% "(Get-Process | Where-Object { $_.MainWindowTitle -like '*!test!*' }).ProcessName"  | find /i "cmd" %nul1% && (set terminal=)
-title %comspec%
+set "launchcmd=start conhost.exe %psc%"
+) else (
+set "launchcmd=%psc%"
 )
 
-if defined terminal if not defined wtrel (
-start conhost.exe "!_batf!" %_args% -wt
-exit /b
-)
+set "d1=$t=[AppDomain]::CurrentDomain.DefineDynamicAssembly(4, 1).DefineDynamicModule(2, $False).DefineType(0);"
+set "d2=$t.DefinePInvokeMethod('GetStdHandle', 'kernel32.dll', 22, 1, [IntPtr], @([Int32]), 1, 3).SetImplementationFlags(128);"
+set "d3=$t.DefinePInvokeMethod('SetConsoleMode', 'kernel32.dll', 22, 1, [Boolean], @([IntPtr], [Int32]), 1, 3).SetImplementationFlags(128);"
+set "d4=$k=$t.CreateType(); $b=$k::SetConsoleMode($k::GetStdHandle(-10), 0x0080);"
 
-for %%# in (%_args%) do (if /i "%%#"=="-wt" set terminal=)
-)
+if defined quedit goto :skipQE
+%launchcmd% "%d1% %d2% %d3% %d4% & cmd.exe '/c' '!_PSarg! -qedit'" &exit /b
+:skipQE
 
 ::========================================================================================================================================
 
@@ -269,9 +279,9 @@ echo ________________________________________________
 echo:
 if not %_unattended%==1 (
 echo [1] 获取最新的 IAS
-echo [0] 仍然继续
+echo [0] 继续
 echo:
-call :_color %_Green% "在键盘上输入菜单选项 [1,0] :"
+call :_color %_Green% "在键盘上输入一个菜单选项 [1,0] :"
 choice /C:10 /N
 if !errorlevel!==2 rem
 if !errorlevel!==1 (start https://github.com/WindowsAddict/IDM-Activation-Script & start %mas%/idm-activation-script & exit /b)
@@ -281,45 +291,37 @@ if !errorlevel!==1 (start https://github.com/WindowsAddict/IDM-Activation-Script
 ::========================================================================================================================================
 
 cls
-title IDM激活脚本 %iasver%
+title  IDM 激活脚本 %iasver%
 
 echo:
 echo 初始化...
 
-:: 检查 PowerShell
-
-%psc% $ExecutionContext.SessionState.LanguageMode %nul2% | find /i "Full" %nul1% || (
-%nceline%
-%psc% $ExecutionContext.SessionState.LanguageMode
-echo:
-echo PowerShell未正常工作。中止操作...
-echo 如果已经对 PowerShell 进行了限制，请撤销这些更改。
-echo:
-echo 请查看此页面以获取帮助。 %mas%idm-activation-script.html#Troubleshoot
-goto done2
-)
-
 :: 检查 WMI
+
 %psc% "Get-WmiObject -Class Win32_ComputerSystem | Select-Object -Property CreationClassName" %nul2% | find /i "computersystem" %nul1% || (
 %eline%
 %psc% "Get-WmiObject -Class Win32_ComputerSystem | Select-Object -Property CreationClassName"
 echo:
-echo WMI未正常工作。中止操作...
+echo WMI 未正常工作。正在中止...
 echo:
 echo 请查看此页面以获取帮助。 %mas%idm-activation-script.html#Troubleshoot
 goto done2
 )
 
-:: 检查用户帐户 SID
+:: 检查用户账户 SID
 
 set _sid=
+for /f "delims=" %%a in ('%psc% "([System.Security.Principal.NTAccount](Get-WmiObject -Class Win32_ComputerSystem).UserName).Translate([System.Security.Principal.SecurityIdentifier]).Value" %nul6%') do (set _sid=%%a)
+ 
+reg query HKU\%_sid%\Software %nul% || (
 for /f "delims=" %%a in ('%psc% "$explorerProc = Get-Process -Name explorer | Where-Object {$_.SessionId -eq (Get-Process -Id $pid).SessionId} | Select-Object -First 1; $sid = (gwmi -Query ('Select * From Win32_Process Where ProcessID=' + $explorerProc.Id)).GetOwnerSid().Sid; $sid" %nul6%') do (set _sid=%%a)
+)
 
-reg query HKU\%_sid%\Software\Classes %nul% || (
+reg query HKU\%_sid%\Software %nul% || (
 %eline%
 echo:
 echo [%_sid%]
-echo 未找到用户帐户 SID。中止操作...
+echo 用户账户 SID 未找到。正在中止...
 echo:
 echo 请查看此页面以获取帮助。 %mas%idm-activation-script.html#Troubleshoot
 goto done2
@@ -328,19 +330,20 @@ goto done2
 ::========================================================================================================================================
 
 :: 检查当前用户 SID 是否与 HKCU 条目同步
-reg delete HKCU\IAS_TEST /f %nul%
-reg delete HKU\%_sid%\IAS_TEST /f %nul%
+
+%nul% reg delete HKCU\IAS_TEST /f
+%nul% reg delete HKU\%_sid%\IAS_TEST /f
 
 set HKCUsync=$null
-reg add HKCU\IAS_TEST %nul%
-reg query HKU\%_sid%\IAS_TEST %nul% && (
+%nul% reg add HKCU\IAS_TEST
+%nul% reg query HKU\%_sid%\IAS_TEST && (
 set HKCUsync=1
 )
 
-reg delete HKCU\IAS_TEST /f %nul%
-reg delete HKU\%_sid%\IAS_TEST /f %nul%
+%nul% reg delete HKCU\IAS_TEST /f
+%nul% reg delete HKU\%_sid%\IAS_TEST /f
 
-::  以下代码也适用于 ARM64 Windows 10（包括 x64 位仿真）
+:: 下面的代码也适用于 ARM64 Windows 10（包括 x64 位模拟）
 
 for /f "skip=2 tokens=2*" %%a in ('reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" /v PROCESSOR_ARCHITECTURE') do set arch=%%b
 if /i not "%arch%"=="x86" set arch=x64
@@ -357,31 +360,38 @@ set "HKLM=HKLM\SOFTWARE\Wow6432Node\Internet Download Manager"
 
 for /f "tokens=2*" %%a in ('reg query "HKU\%_sid%\Software\DownloadManager" /v ExePath %nul6%') do call set "IDMan=%%b"
 
+if not exist "%IDMan%" (
+if %arch%==x64 set "IDMan=%ProgramFiles(x86)%\Internet Download Manager\IDMan.exe"
+if %arch%==x86 set "IDMan=%ProgramFiles%\Internet Download Manager\IDMan.exe"
+)
+
 if not exist %SystemRoot%\Temp md %SystemRoot%\Temp
 set "idmcheck=tasklist /fi "imagename eq idman.exe" | findstr /i "idman.exe" %nul1%"
 
 :: 检查 CLSID 注册表访问
 
-reg add %CLSID2%\IAS_TEST %nul%
-reg query %CLSID2%\IAS_TEST %nul% || (
+%nul% reg add %CLSID2%\IAS_TEST
+%nul% reg query %CLSID2%\IAS_TEST || (
 %eline%
-echo 无法在 %CLSID2% 中写入。
+echo 无法写入 %CLSID2%
 echo:
 echo 请查看此页面以获取帮助。 %mas%idm-activation-script.html#Troubleshoot
 goto done2
 )
 
-reg delete %CLSID2%\IAS_TEST /f %nul%
+%nul% reg delete %CLSID2%\IAS_TEST /f
 
 ::========================================================================================================================================
+::没搞懂第二个选项为什么改了字就会出错，也许是我电脑原因？有没有人找到原因提交个PR？
 
 if %_reset%==1 goto :_reset
-if %_activate%==1 goto :_activate
+if %_activate%==1 (set frz=0&goto :_activate)
+if %_freeze%==1 (set frz=1&goto :_activate)
 
 :MainMenu
 
 cls
-title IDM激活脚本 %iasver%
+title  IDM Activation Script %iasver%
 if not defined terminal mode 75, 28
 
 echo:
@@ -392,24 +402,29 @@ echo:
 echo:
 echo:            ___________________________________________________ 
 echo:                                                               
-echo:               [1] 激活 IDM
-echo:               [2] 重置 IDM 激活 / 试用
+echo:               [1] 冻结30天免费试用
+echo:               [2] Activate ^(Not working^)
+echo:               [3] 重置激活/免费试用
 echo:               _____________________________________________   
 echo:                                                               
-echo:               [3] 下载 IDM
-echo:               [4] 软件主页/帮助
+echo:               [4] 下载IDM
+echo:               [5] 帮助
 echo:               [0] 退出
 echo:            ___________________________________________________
 echo:         
-call :_color2 %_White% "             " %_Green% "在键盘上输入菜单选项 [1,2,3,4,0]"
-choice /C:12340 /N
+echo:         汉化^ By Github@yhgzs-11^1
+echo:         
+call :_color2 %_White% "             " %_Green% "输入键盘上的菜单选项 [1,2,3,4,5,0]"
+choice /C:123450 /N
 set _erl=%errorlevel%
 
-if %_erl%==5 exit /b
-if %_erl%==4 start https://massgrave.dev/idm-activation-script & start https://github.com/yhgzs-111/IDM-Activation-Script-ZH/ & goto MainMenu
-if %_erl%==3 start https://www.internetdownloadmanager.com/download.html & goto MainMenu
-if %_erl%==2 goto _reset
-if %_erl%==1 goto _activate
+if %_erl%==6 exit /b
+if %_erl%==5 start https://github.com/WindowsAddict/IDM-Activation-Script & start https://massgrave.dev/idm-activation-script & start https://github.com/yhgzs-111/IDM-Activation-Script-ZH & goto MainMenu
+if %_erl%==4 start https://www.internetdownloadmanager.com/download.html & goto MainMenu
+if %_erl%==3 goto _reset
+if %_erl%==2 (set frz=0&goto :_activate)
+if %_erl%==1 (set frz=1&goto :_activate)
+
 goto :MainMenu
 
 ::========================================================================================================================================
@@ -431,13 +446,13 @@ set _time=
 for /f %%a in ('%psc% "(Get-Date).ToString('yyyyMMdd-HHmmssfff')"') do set _time=%%a
 
 echo:
-echo 在 %SystemRoot%\Temp 创建 CLSID 注册表键的备份
+echo 创建 CLSID 注册表项备份至 %SystemRoot%\Temp
 
 reg export %CLSID% "%SystemRoot%\Temp\_Backup_HKCU_CLSID_%_time%.reg"
 if not %HKCUsync%==1 reg export %CLSID2% "%SystemRoot%\Temp\_Backup_HKU-%_sid%_CLSID_%_time%.reg"
 
 call :delete_queue
-%psc% "$HKCUsync = %HKCUsync%; $lockKey = $null; $deleteKey = 1; $f=[io.file]::ReadAllText('!_batp!') -split ':regscan\:.*';iex ($f[1])"
+%psc% "$sid = '%_sid%'; $HKCUsync = %HKCUsync%; $lockKey = $null; $deleteKey = 1; $f=[io.file]::ReadAllText('!_batp!') -split ':regscan\:.*';iex ($f[1])"
 
 call :add_key
 
@@ -445,13 +460,13 @@ echo:
 echo %line%
 echo:
 call :_color %Green% "IDM 重置过程已完成。"
-echo 帮助: %mas%idm-activation-script.html#Troubleshoot
 
 goto done
+
 :delete_queue
 
 echo:
-echo 删除 IDM 注册表键...
+echo 删除 IDM 注册表项...
 echo:
 
 for %%# in (
@@ -493,7 +508,7 @@ reg delete %reg% /f %nul%
 
 if "%errorlevel%"=="0" (
 set "reg=%reg:"=%"
-echo 删除 - !reg!
+echo 已删除 - !reg!
 ) else (
 set "reg=%reg:"=%"
 call :_color2 %Red% "失败 - !reg!"
@@ -513,21 +528,35 @@ if not defined terminal mode 113, 35
 )
 if not defined terminal %psc% "&%_buf%" %nul%
 
+if %frz%==0 if %_unattended%==0 (
+echo:
+echo %line%
+echo:
+echo      激活对于某些用户无效，IDM 可能会显示虚假序列号提示窗口。
+echo:
+call :_color2 %_White% "     " %_Green% "建议使用冻结试用期选项。"
+echo %line%
+echo:
+choice /C:19 /N /M ">    [1] 返回 [9] 激活 : "
+if !errorlevel!==1 goto :MainMenu
+cls
+)
+
 echo:
 if not exist "%IDMan%" (
 call :_color %Red% "IDM [Internet Download Manager] 未安装。"
-echo 您可以从 https://www.internetdownloadmanager.com/download.html 下载它
+echo 您可以从 https://www.internetdownloadmanager.com/download.html 下载。
 goto done
 )
 
-:: 使用 internetdownloadmanager.com 的 ping 和端口 80 测试进行互联网检查
+:: 使用 internetdownloadmanager.com ping 和端口 80 测试进行
 
 set _int=
 for /f "delims=[] tokens=2" %%# in ('ping -n 1 internetdownloadmanager.com') do (if not [%%#]==[] set _int=1)
 
 if not defined _int (
 %psc% "$t = New-Object Net.Sockets.TcpClient;try{$t.Connect("""internetdownloadmanager.com""", 80)}catch{};$t.Connected" | findstr /i "true" %nul1% || (
-call :_color %Red% "无法连接 internetdownloadmanager.com，中止操作..."
+call :_color %Red% "无法连接 internetdownloadmanager.com，请中止..."
 goto done
 )
 call :_color %Gray% "internetdownloadmanager.com 的 ping 命令失败"
@@ -547,7 +576,7 @@ set _time=
 for /f %%a in ('%psc% "(Get-Date).ToString('yyyyMMdd-HHmmssfff')"') do set _time=%%a
 
 echo:
-echo 在 %SystemRoot%\Temp 创建 CLSID 注册表键的备份
+echo 创建 CLSID 注册表项备份至 %SystemRoot%\Temp
 
 reg export %CLSID% "%SystemRoot%\Temp\_Backup_HKCU_CLSID_%_time%.reg"
 if not %HKCUsync%==1 reg export %CLSID2% "%SystemRoot%\Temp\_Backup_HKU-%_sid%_CLSID_%_time%.reg"
@@ -555,22 +584,33 @@ if not %HKCUsync%==1 reg export %CLSID2% "%SystemRoot%\Temp\_Backup_HKU-%_sid%_C
 call :delete_queue
 call :add_key
 
-%psc% "$HKCUsync = %HKCUsync%; $lockKey = 1; $deleteKey = $null; $toggle = 1; $f=[io.file]::ReadAllText('!_batp!') -split ':regscan\:.*';iex ($f[1])"
+%psc% "$sid = '%_sid%'; $HKCUsync = %HKCUsync%; $lockKey = 1; $deleteKey = $null; $toggle = 1; $f=[io.file]::ReadAllText('!_batp!') -split ':regscan\:.*';iex ($f[1])"
 
-call :register_IDM
+if %frz%==0 call :register_IDM
 
-if not defined _fileexist call :_color %Red% "错误: 无法使用 IDM 下载文件。"
+call :download_files
+if not defined _fileexist (
+%eline%
+echo 错误：无法使用 IDM 下载文件。
+echo:
+echo 帮助： %mas%idm-activation-script.html#Troubleshoot
+goto :done
+)
 
-%psc% "$HKCUsync = %HKCUsync%; $lockKey = 1; $deleteKey = $null; $f=[io.file]::ReadAllText('!_batp!') -split ':regscan\:.*';iex ($f[1])"
+%psc% "$sid = '%_sid%'; $HKCUsync = %HKCUsync%; $lockKey = 1; $deleteKey = $null; $f=[io.file]::ReadAllText('!_batp!') -split ':regscan\:.*';iex ($f[1])"
 
 echo:
 echo %line%
 echo:
+if %frz%==0 (
 call :_color %Green% "IDM 激活过程已完成。"
 echo:
-call :_color %Gray% "如果出现假序列屏幕，请再次运行激活选项，不要使用重置选项。"
+call :_color %Gray% "如果出现假序列号提示，请使用冻结试用选项。"
+) else (
+call :_color %Green% "IDM 30 天试用期已成功冻结，终身有效。"
 echo:
-echo 帮助: %mas%idm-activation-script.html#Troubleshoot
+call :_color %Gray% "如果 IDM 弹出注册提示，请重新安装 IDM。"
+)
 
 ::========================================================================================================================================
 
@@ -614,25 +654,32 @@ exit /b
 :register_IDM
 
 echo:
-echo 应用注册信息...
+echo 应用注册详情中...
 echo:
 
-If not defined name set name=Tonec FZE
+set /a fname=%random% %% 9999 + 1000
+set /a lname=%random% %% 9999 + 1000
+set email=%fname%.%lname%@tonec.com
 
-set "reg=HKCU\SOFTWARE\DownloadManager /v FName /t REG_SZ /d "%name%"" & call :_rcont
-set "reg=HKCU\SOFTWARE\DownloadManager /v LName /t REG_SZ /d """ & call :_rcont
-set "reg=HKCU\SOFTWARE\DownloadManager /v Email /t REG_SZ /d "info@tonec.com"" & call :_rcont
-set "reg=HKCU\SOFTWARE\DownloadManager /v Serial /t REG_SZ /d "FOX6H-3KWH4-7TSIN-Q4US7"" & call :_rcont
+for /f "delims=" %%a in ('%psc% "$key = -join ((Get-Random -Count 20 -InputObject ([char[]]('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'))));$key = ($key.Substring(0, 5) + '-' + $key.Substring(5, 5) + '-' + $key.Substring(10, 5) + '-' + $key.Substring(15, 5) + $key.Substring(20));Write-Output $key" %nul6%') do (set key=%%a)
+
+set "reg=HKCU\SOFTWARE\DownloadManager /v FName /t REG_SZ /d "%fname%"" & call :_rcont
+set "reg=HKCU\SOFTWARE\DownloadManager /v LName /t REG_SZ /d "%lname%"" & call :_rcont
+set "reg=HKCU\SOFTWARE\DownloadManager /v Email /t REG_SZ /d "%email%"" & call :_rcont
+set "reg=HKCU\SOFTWARE\DownloadManager /v Serial /t REG_SZ /d "%key%"" & call :_rcont
 
 if not %HKCUsync%==1 (
-set "reg=HKU\%_sid%\SOFTWARE\DownloadManager /v FName /t REG_SZ /d "%name%"" & call :_rcont
-set "reg=HKU\%_sid%\SOFTWARE\DownloadManager /v LName /t REG_SZ /d """ & call :_rcont
-set "reg=HKU\%_sid%\SOFTWARE\DownloadManager /v Email /t REG_SZ /d "info@tonec.com"" & call :_rcont
-set "reg=HKU\%_sid%\SOFTWARE\DownloadManager /v Serial /t REG_SZ /d "FOX6H-3KWH4-7TSIN-Q4US7"" & call :_rcont
+set "reg=HKU\%_sid%\SOFTWARE\DownloadManager /v FName /t REG_SZ /d "%fname%"" & call :_rcont
+set "reg=HKU\%_sid%\SOFTWARE\DownloadManager /v LName /t REG_SZ /d "%lname%"" & call :_rcont
+set "reg=HKU\%_sid%\SOFTWARE\DownloadManager /v Email /t REG_SZ /d "%email%"" & call :_rcont
+set "reg=HKU\%_sid%\SOFTWARE\DownloadManager /v Serial /t REG_SZ /d "%key%"" & call :_rcont
 )
+exit /b
+
+:download_files
 
 echo:
-echo 触发几次下载以创建特定的注册表键，请等待...
+echo 正在触发下载以创建特定的注册表键，请稍候...
 echo:
 
 set "file=%SystemRoot%\Temp\temp.png"
@@ -656,6 +703,7 @@ exit /b
 set /a attempt=0
 if exist "%file%" del /f /q "%file%"
 start "" /B "%IDMan%" /n /d "%link%" /p "%SystemRoot%\Temp" /f temp.png
+
 :check_file
 
 timeout /t 1 %nul1%
@@ -669,7 +717,7 @@ goto :check_file
 :add_key
 
 echo:
-echo 添加注册表键...
+echo 添加注册表键中...
 echo:
 
 set "reg="%HKLM%" /v "AdvIntDriverEnabled2""
@@ -680,19 +728,17 @@ reg add %reg% /t REG_DWORD /d "1" /f %nul%
 
 if "%errorlevel%"=="0" (
 set "reg=%reg:"=%"
-echo 添加成功 - !reg!
+echo 已添加 - !reg!
 ) else (
 set "reg=%reg:"=%"
-call :_color2 %Red% "失败 - !reg!"
+call :_color2 %Red% "添加失败 - !reg!"
 )
 exit /b
+
 ::========================================================================================================================================
 
 :regscan:
 $finalValues = @()
-
-$explorerProc = Get-Process -Name explorer | Where-Object {$_.SessionId -eq (Get-Process -Id $pid).SessionId} | Select-Object -First 1
-$sid = (gwmi -Query "Select * From Win32_Process Where ProcessID='$($explorerProc.Id)'").GetOwnerSid().Sid
 
 $arch = (Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Environment').PROCESSOR_ARCHITECTURE
 if ($arch -eq "x86") {
@@ -706,23 +752,23 @@ foreach ($regPath in $regPaths) {
         continue
     }
 	
-    Write-Host
-    Write-Host "在 $regPath 中搜索 IDM CLSID 注册表键"
-    Write-Host
+	Write-Host
+	Write-Host "在 $regPath 中搜索 IDM CLSID 注册表键"
+	Write-Host
 	
     $subKeys = Get-ChildItem -Path $regPath -ErrorAction SilentlyContinue -ErrorVariable lockedKeys | Where-Object { $_.PSChildName -match '^\{[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}\}$' }
 
     foreach ($lockedKey in $lockedKeys) {
         $leafValue = Split-Path -Path $lockedKey.TargetObject -Leaf
         $finalValues += $leafValue
-        Write-Output "$leafValue - 已找到锁定的键"
+        Write-Output "$leafValue - 找到锁定的键"
     }
 
     if ($subKeys -eq $null) {
-        continue
-    }
-    
-    $subKeysToExclude = "LocalServer32", "InProcServer32", "InProcHandler32"
+	continue
+	}
+	
+	$subKeysToExclude = "LocalServer32", "InProcServer32", "InProcHandler32"
 
     $filteredKeys = $subKeys | Where-Object { !($_.GetSubKeyNames() | Where-Object { $subKeysToExclude -contains $_ }) }
 
@@ -738,7 +784,7 @@ foreach ($regPath in $regPaths) {
         }
         if (($defaultValue -match "\+|=") -and ($key.SubKeyCount -eq 0)) {
             $finalValues += $($key.PSChildName)
-            Write-Output "$($key.PSChildName) - 在默认值中找到 + 或 = 且没有子键"
+            Write-Output "$($key.PSChildName) - 在默认值中找到+或=且没有子键"
             continue
         }
         $versionValue = Get-ItemProperty -Path "$fullPath\Version" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty '(default)' -ErrorAction SilentlyContinue
@@ -775,49 +821,52 @@ if ($finalValues -ne $null) {
     Write-Host
 } else {
     Write-Host "未找到 IDM CLSID 注册表键。"
-    $key.SetAccessControl($acl)
-
-    $rule = New-Object System.Security.AccessControl.RegistryAccessRule(
-        $everyone,
-        'FullControl',
-        'Allow'
-    )
-    $acl.SetAccessRule($rule)
-    $key.SetAccessControl($acl)
+	Exit
 }
 
-foreach ($regPath in $finalValues) {
-    $path = $regPath -replace "Registry::", ""
-    $rootKey = $path -split '\\', 2
-    $regKey = $path -split '\\', 3
-    Take-Permissions -rootKey $rootKey[0] -regKey $rootKey[1]
-    $key = [Microsoft.Win32.Registry]::$rootKey[0].OpenSubKey($rootKey[1], 'ReadWriteSubTree', 'TakeOwnership')
-    if ($key -ne $null) {
-        $key.DeleteSubKeyTree($regKey[2], $false)
-        Write-Host "已删除注册表键: $($regKey[2])"
-    } else {
-        Write-Host "无法删除注册表键: $($regKey[2])"
-    }
+if (($finalValues.Count -gt 20) -and ($toggle -ne $null)) {
+	$lockKey = $null
+	$deleteKey = 1
+    Write-Host "IDM 键数超过 20 个。现在删除它们而不是锁定..."
+	Write-Host
 }
 
-Write-Host
-Write-Host "已删除所有 IDM CLSID 注册表键。"
-Write-Host
-        $key = $key.OpenSubKey('', 'ReadWriteSubTree', 'ChangePermissions')
-        $rule = New-Object System.Security.AccessControl.RegistryAccessRule($everyone, 'FullControl', 'ContainerInherit', 'None', 'Allow')
-        $acl.ResetAccessRule($rule)
+function Take-Permissions {
+    param($rootKey, $regKey)
+    $AssemblyBuilder = [AppDomain]::CurrentDomain.DefineDynamicAssembly(4, 1)
+    $ModuleBuilder = $AssemblyBuilder.DefineDynamicModule(2, $False)
+    $TypeBuilder = $ModuleBuilder.DefineType(0)
+
+    $TypeBuilder.DefinePInvokeMethod('RtlAdjustPrivilege', 'ntdll.dll', 'Public, Static', 1, [int], @([int], [bool], [bool], [bool].MakeByRefType()), 1, 3) | Out-Null
+    9,17,18 | ForEach-Object { $TypeBuilder.CreateType()::RtlAdjustPrivilege($_, $true, $false, [ref]$false) | Out-Null }
+
+    $SID = New-Object System.Security.Principal.SecurityIdentifier('S-1-5-32-544')
+    $IDN = ($SID.Translate([System.Security.Principal.NTAccount])).Value
+    $Admin = New-Object System.Security.Principal.NTAccount($IDN)
+
+    $everyone = New-Object System.Security.Principal.SecurityIdentifier('S-1-1-0')
+    $none = New-Object System.Security.Principal.SecurityIdentifier('S-1-0-0')
+
+    $key = [Microsoft.Win32.Registry]::$rootKey.OpenSubKey($regkey, 'ReadWriteSubTree', 'TakeOwnership')
+
+    $acl = New-Object System.Security.AccessControl.RegistrySecurity
+    $acl.SetOwner($Admin)
+    $key.SetAccessControl($acl)
+
+    $key = $key.OpenSubKey('', 'ReadWriteSubTree', 'ChangePermissions')
+    $rule = New-Object System.Security.AccessControl.RegistryAccessRule($everyone, 'FullControl', 'ContainerInherit', 'None', 'Allow')
+    $acl.ResetAccessRule($rule)
+    $key.SetAccessControl($acl)
+
+    if ($lockKey -ne $null) {
+        $acl = New-Object System.Security.AccessControl.RegistrySecurity
+        $acl.SetOwner($none)
         $key.SetAccessControl($acl)
 
-        if ($lockKey -ne $null) {
-            $acl = New-Object System.Security.AccessControl.RegistrySecurity
-            $acl.SetOwner($none)
-            $key.SetAccessControl($acl)
-
-            $key = $key.OpenSubKey('', 'ReadWriteSubTree', 'ChangePermissions')
-            $rule = New-Object System.Security.AccessControl.RegistryAccessRule($everyone, 'FullControl', 'Deny')
-            $acl.ResetAccessRule($rule)
-            $key.SetAccessControl($acl)
-        }
+        $key = $key.OpenSubKey('', 'ReadWriteSubTree', 'ChangePermissions')
+        $rule = New-Object System.Security.AccessControl.RegistryAccessRule($everyone, 'FullControl', 'Deny')
+        $acl.ResetAccessRule($rule)
+        $key.SetAccessControl($acl)
     }
 }
 
@@ -832,6 +881,7 @@ foreach ($regPath in $regPaths) {
         } else {
             $rootKey = 'Users'
         }
+
         $position = $fullPath.IndexOf("\")
         $regKey = $fullPath.Substring($position + 1)
 
@@ -866,28 +916,29 @@ foreach ($regPath in $regPaths) {
             }
         }
     }
-}:regscan:
+}
+:regscan:
 
 ::========================================================================================================================================
 
 :_color
 
 if %_NCS% EQU 1 (
-    echo %esc%[%~1%~2%esc%[0m
+echo %esc%[%~1%~2%esc%[0m
 ) else (
-    %psc% write-host -back '%1' -fore '%2' '%3'
+%psc% write-host -back '%1' -fore '%2' '%3'
 )
 exit /b
 
 :_color2
 
 if %_NCS% EQU 1 (
-    echo %esc%[%~1%~2%esc%[%~3%~4%esc%[0m
+echo %esc%[%~1%~2%esc%[%~3%~4%esc%[0m
 ) else (
-    %psc% write-host -back '%1' -fore '%2' '%3' -NoNewline; write-host -back '%4' -fore '%5' '%6'
+%psc% write-host -back '%1' -fore '%2' '%3' -NoNewline; write-host -back '%4' -fore '%5' '%6'
 )
 exit /b
 
 ::========================================================================================================================================
-:: Leave empty line below
+:: 在此留下空行
 
