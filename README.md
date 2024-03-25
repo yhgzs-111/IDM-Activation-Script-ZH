@@ -1,3 +1,7 @@
+# 汉化版已知问题
+
+选项2（激活）汉化后会出错，求大佬帮忙提交PRs
+
 # IDM激活脚本中文汉化版
 
 一个用于激活和重置[Internet Download Manager](https://www.internetdownloadmanager.com/)试用版的开源工具
@@ -31,9 +35,6 @@
 -   复制粘贴下面的代码，然后按Enter键\
     `irm https://massgrave.dev/ias | iex`
 -   你将看到激活选项，请按照屏幕上的说明操作
-
-## 汉化版已知问题
-选项2（激活）汉化后会出错（应该），求大佬帮忙提交PRs
 
 ## 一些信息
 
