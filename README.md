@@ -19,7 +19,7 @@
 
 （推荐，通过此方法下载的程序为汉化版，更适合中国宝宝体制👶）
 
--   从[GitHub Releases](https://github.com/yhgzs-111/IDM-Activation-Script-ZH/releases/download/IDM/IAS_ZH-CN.cmd)下载cmd文件
+-   从[GitHub](https://raw.githubusercontent.com/yhgzs-111/IDM-Activation-Script-ZH/main/IAS(%E6%B1%89%E5%8C%96).cmd)下载cmd文件
 -   右键单击下载的zip文件并解压缩
 -   在提取的文件夹中，运行名为`IAS.cmd`的文件
 -   您将看到激活选项，请按照屏幕上的说明操作
@@ -34,7 +34,7 @@
 -   你将看到激活选项，请按照屏幕上的说明操作
 
 ## 汉化版已知问题
-激活、重置激活时会出现编码问题，本人技术有限无法解决，但不影响使用
+选项2（激活）汉化后会出错（应该），求大佬帮忙提交PRs
 
 ## 一些信息
 
@@ -68,33 +68,6 @@
 ## 故障排除
 
 -   浏览器集成修复：[Chrome](https://www.internetdownloadmanager.com/register/new_faq/bi9.html) - [Firefox](https://www.internetdownloadmanager.com/register/new_faq/bi4.html)
--   在[Discord](https://discord.gg/gjJEfq7ux8)上联系我们（无需注册），并附上错误截图
-
-[![](https://lookimg.com/images/2023/03/21/QTvjcD.png)](https://discord.gg/gjJEfq7ux8)
-
-## 更新日志
-
-#### v1.0
-
--   添加了重新启动脚本的代码，如果脚本是从终端应用程序运行的，则使用conhost.exe重新启动脚本。
--   修复了获取当前用户帐户SID的问题。
-
-#### v0.9
-
--   修复了脚本无法在非管理员用户帐户中激活和重置IDM的问题。
--   修复了脚本错误地显示IDM已激活的问题。
--   修复了虚假序列号弹出窗口可能出现的问题。脚本还将显示信息，指示再次运行激活选项，而不使用重置选项。
--   修复了由于GitHub在某些地区的阻止而导致的Powershell代码无法启动IAS的问题。它将使用新的[BitBucket](https://bitbucket.org/WindowsAddict/idm-activation-script/)存储库作为备用链接。
--   IDM注册表扫描和锁定代码现在以Powershell编写。
--   向脚本添加了脚本更新检查代码。
--   脚本现在将在执行操作之前备份CLSISD注册表键。
--   添加了许多错误检查，以更好地识别问题。
-
-#### v0.8
-
--   将项目移到[Github](https://github.com/WindowsAddict/IDM-Activation-Script)和[massgrave.dev](https://massgrave.dev/idm-activation-script.html)。
--   进行了一些小的bug修复
--   添加信息，通知用户在删除许多注册表键时脚本将删除空的注册表键。
 
 ## 截图
 
