@@ -1,4 +1,4 @@
-使用说明请在 https://yhgzs-111.github.io/post/IDM.html 查看。
+使用说明、QNA请在 https://yhgzs-111.github.io/post/IDM.html 查看。
 
 # 说明文档
 
