@@ -16,4 +16,4 @@
 
 100 Stars！
 
-![image](https://github.com/yhgzs-111/IDM-Activation-Script-ZH/assets/77568569/ff352b68-a474-4a08-8d38-430ccfddd11d)
+![100Stars](https://github.com/yhgzs-111/IDM-Activation-Script-ZH/assets/77568569/ff352b68-a474-4a08-8d38-430ccfddd11d)
