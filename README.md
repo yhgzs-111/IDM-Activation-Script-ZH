@@ -1,6 +1,6 @@
 # Download
 
-**White people download this script is recommended to https://yhgzs-111.github.io/post/IDM.html download, directly copy and paste the code may cause coding problems!**
+**Newcomer download this script is recommended to https://yhgzs-111.github.io/post/IDM.html download, directly copy and paste the code may cause coding problems!**
 
 **If you download via raw, please right click and save as cmd file.**
 
