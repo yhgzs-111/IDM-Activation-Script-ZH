@@ -1,19 +1,19 @@
-# 下载
+# Download
 
-**小白下载此脚本建议到 https://yhgzs-111.github.io/post/IDM.html 下载，直接复制粘贴代码有可能造成编码问题！**
+**White people download this script is recommended to https://yhgzs-111.github.io/post/IDM.html download, directly copy and paste the code may cause coding problems!**
 
-**如通过raw下载，请右键另存为cmd文件。**
+**If you download via raw, please right click and save as cmd file.**
 
-**使用说明、QNA请在 https://yhgzs-111.github.io/post/IDM.html 查看。**
+**Instructions for use, QNAs are available at https://yhgzs-111.github.io/post/IDM.html.**
 
-# 说明文档
+# Explanation of Documentation
 
-已迁移至Github Pages，请在 https://yhgzs-111.github.io/post/IDM.html 查看。
+Migrated to Github Pages, see it at https://yhgzs-111.github.io/post/IDM.html.
 
-原版脚本Github仓库：https://github.com/WindowsAddict/IDM-Activation-Script
+Original script Github repository: https://github.com/WindowsAddict/IDM-Activation-Script
 
-# 成就
+# Achievements
 
-100 Stars！
+100 Stars!
 
 ![100Stars](https://github.com/yhgzs-111/IDM-Activation-Script-ZH/assets/77568569/ff352b68-a474-4a08-8d38-430ccfddd11d)
